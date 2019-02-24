@@ -1,8 +1,54 @@
-//Add a new boolean data property `onSale` and create a computed property that takes `brand`, `product` and `onSale` and prints out a string whenever `onSale` is true.
+//Create a new component for product-details with a prop of details. 
 
-var app = new Vue({
-    el: '#app',
-    data: {
+Vue.component('product', {
+  props: {
+    premium: {
+      type: Boolean,
+      required: true
+    }
+  },
+  template: `
+   <div class="product">
+        
+      <div class="product-image">
+        <img :src="image" />
+      </div>
+
+      <div class="product-info">
+          <h1>{{ product }}</h1>
+          <p v-if="inStock">In Stock</p>
+          <p v-else>Out of Stock</p>
+          <p>Shipping: {{ shipping }}</p>
+
+          <ul>
+            <li v-for="detail in details">{{ detail }}</li>
+          </ul>
+
+          <div class="color-box"
+               v-for="(variant, index) in variants" 
+               :key="variant.variantId"
+               :style="{ backgroundColor: variant.variantColor }"
+               @mouseover="updateProduct(index)"
+               >
+          </div> 
+
+          <button v-on:click="addToCart" 
+            :disabled="!inStock"
+            :class="{ disabledButton: !inStock }"
+            >
+          Add to cart
+          </button>
+
+          <div class="cart">
+            <p>Cart({{ cart }})</p>
+          </div>
+
+       </div>  
+    
+    </div>
+   `,
+  data() {
+    return {
         product: 'Socks',
         brand: 'Vue Mastery',
         selectedVariant: 0,
@@ -22,15 +68,15 @@ var app = new Vue({
           }
         ],
         cart: 0
-    },
+    }
+  },
     methods: {
-        addToCart: function() {
-            this.cart += 1
-        },
-        updateProduct: function(index) {  
-            this.selectedVariant = index
-            console.log(index)
-        }
+      addToCart: function() {
+          this.cart += 1
+      },
+      updateProduct: function(index) {  
+          this.selectedVariant = index
+      }
     },
     computed: {
         title() {
@@ -41,6 +87,19 @@ var app = new Vue({
         },
         inStock(){
             return this.variants[this.selectedVariant].variantQuantity
+        },
+        shipping() {
+          if (this.premium) {
+            return "Free"
+          }
+            return 2.99
         }
     }
-  })
+})
+
+var app = new Vue({
+    el: '#app',
+    data: {
+      premium: true
+    }
+})
