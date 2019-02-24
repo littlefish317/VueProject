@@ -1,0 +1,31 @@
+{
+  "name": "vueproject",
+  "version": "1.0.0",
+  "description": "Run Vue Mastery example project",
+  "main": "main.js",
+  "scripts": {
+    "dev": "webpack-dev-server --inline --hot",
+    "test": "test",
+    "build": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/littlefish317/VueProject.git"
+  },
+  "author": "Katie Uhl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/littlefish317/VueProject/issues"
+  },
+  "homepage": "https://github.com/littlefish317/VueProject#readme",
+  "dependencies": {
+    "css-loader": "^2.1.0",
+    "vue": "^2.6.7",
+    "vue-loader": "^15.6.4",
+    "vue-router": "^3.0.2",
+    "vue-template-compiler": "^2.6.7",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.0"
+  }
+}
