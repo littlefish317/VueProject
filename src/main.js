@@ -20,11 +20,7 @@ Vue.component('product', {
             <h1>{{ product }}</h1>
             <p v-if="inStock">In Stock</p>
             <p v-else>Out of Stock</p>
-            <p>Shipping: {{ shipping }}</p>
-  
-            <ul>
-              <li v-for="detail in details">{{ detail }}</li>
-            </ul>
+            
   
             <div class="color-box"
                  v-for="(variant, index) in variants" 
@@ -43,7 +39,7 @@ Vue.component('product', {
   
          </div> 
 
-         <product-tabs :reviews="reviews"></product-tabs>
+         <product-tabs :reviews="reviews" :premium="premium"></product-tabs>
       
       </div>
      `,
@@ -52,7 +48,6 @@ Vue.component('product', {
           product: 'Socks',
           brand: 'Vue Mastery',
           selectedVariant: 0,
-          details: ['80% cotton', '20% polyester', 'Gender-neutral'],
           variants: [
             {
               variantId: 2234,
@@ -87,12 +82,6 @@ Vue.component('product', {
           },
           inStock(){
               return this.variants[this.selectedVariant].variantQuantity
-          },
-          shipping() {
-            if (this.premium) {
-              return "Free"
-            }
-              return 2.99
           }
       },
       mounted() {
@@ -107,6 +96,12 @@ Vue.component('product', {
     template: `
     <form class="review-form" @submit.prevent="onSubmit">
 
+    <div v-if="errors.length">
+    	<b>Please correct the following errors: </b>
+		<ul>
+			<li v-for="error in errors">{{ error }}</li>
+		</ul>
+	</div>
     <p>
       <label for="name">Name:</label>
       <input class="name" v-model="name">
@@ -170,6 +165,10 @@ Vue.component('product', {
       reviews: {
         type: Array,
         required: false
+      },
+      premium: {
+        type: Boolean,
+        required: true
       }
     },
     template: `
@@ -198,14 +197,33 @@ Vue.component('product', {
         <div v-show="selectedTab === 'Make a Review'">
           <product-review></product-review>
         </div>
+
+        <div v-show="selectedTab === 'Shipping'">
+        	<p>Shipping: {{ shipping }}</p>
+        </div>
+
+        <div v-show="selectedTab === 'Details'">
+			<ul>
+              <li v-for="detail in details">{{ detail }}</li>
+            </ul>
+        </div>
     
       </div>
     `,
     data() {
       return {
-        tabs: ['Reviews', 'Make a Review'],
-        selectedTab: 'Reviews'
+        tabs: ['Reviews', 'Make a Review', 'Shipping', 'Details'],
+        selectedTab: 'Reviews',
+        details: ['80% cotton', '20% polyester', 'Gender-neutral'],
       }
+    }, 
+    computed: {
+    	shipping() {
+            if (this.premium) {
+              return "Free"
+            }
+              return 2.99
+          }
     }
   })
 
